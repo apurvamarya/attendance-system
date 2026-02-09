@@ -4,6 +4,9 @@ import pandas as pd
 app = Flask(__name__)
 app.secret_key = "attendance_secret_key"
 
+UPLOAD_API_KEY = "attendance_upload_key"
+
+
 ATTENDANCE_FILE = "attendance/attendance.csv"
 
 # Hardcoded credentials (academic use)
@@ -42,6 +45,30 @@ def get_attendance():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+from flask import request
+
+@app.route("/upload-attendance", methods=["POST"])
+def upload_attendance():
+    api_key = request.headers.get("X-API-KEY")
+
+    if api_key != UPLOAD_API_KEY:
+        return {"error": "Unauthorized"}, 401
+
+    data = request.json
+
+    df = pd.read_csv(ATTENDANCE_FILE)
+
+    df.loc[len(df)] = [
+        data["Name"],
+        data["Date"],
+        data["Time"],
+        data["Status"]
+    ]
+
+    df.to_csv(ATTENDANCE_FILE, index=False)
+    return {"message": "Attendance updated successfully"}
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
