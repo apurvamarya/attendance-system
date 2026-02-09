@@ -1,12 +1,22 @@
 let attendanceData = [];
 
-fetch("/attendance")
-    .then(response => response.json())
-    .then(data => {
-        attendanceData = data;
-        renderTable(data);
-        renderSummaryTable(data);
-    });
+function fetchAttendance() {
+    fetch("/attendance")
+        .then(response => response.json())
+        .then(data => {
+            attendanceData = data;
+            renderTable(data);
+            renderSummaryTable(data);
+        })
+        .catch(err => console.error(err));
+}
+
+// initial load
+fetchAttendance();
+
+// auto-refresh every 5 seconds
+setInterval(fetchAttendance, 5000);
+
 
 function renderTable(data) {
     const tableBody = document.querySelector("#attendanceTable tbody");
