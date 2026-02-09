@@ -4,7 +4,7 @@ import pandas as pd
 app = Flask(__name__)
 app.secret_key = "attendance_secret_key"
 
-ATTENDANCE_FILE = "Project/automated-attendance-system/dashboard/attendance/attendance.csv"
+ATTENDANCE_FILE = "attendance/attendance.csv"
 
 # Hardcoded credentials (academic use)
 USERNAME = "admin"
