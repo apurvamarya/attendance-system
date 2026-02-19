@@ -60,7 +60,7 @@ function filterData() {
     const nameValue = document.getElementById("nameFilter").value.toLowerCase();
     const dateValue = document.getElementById("dateFilter").value;
     
-    if (nameValue === "" && dateValue === "") {
+    if (nameValue === "" || dateValue === "") {
         // auto-refresh every 5 seconds if no filters are applied
         setInterval(fetchAttendance, 5000);
     }
