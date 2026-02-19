@@ -14,21 +14,19 @@ function fetchAttendance() {
 // initial load
 fetchAttendance();
 
-// auto-refresh every 5 seconds
-setInterval(fetchAttendance, 5000);
 
 
 function renderTable(data) {
     const tableBody = document.querySelector("#attendanceTable tbody");
     tableBody.innerHTML = "";
-
+    
     data.forEach(record => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${record.Name}</td>
-            <td>${record.Date}</td>
-            <td>${record.Time}</td>
-            <td>${record.Status}</td>
+        <td>${record.Name}</td>
+        <td>${record.Date}</td>
+        <td>${record.Time}</td>
+        <td>${record.Status}</td>
         `;
         tableBody.appendChild(row);
     });
@@ -36,19 +34,19 @@ function renderTable(data) {
 
 function renderSummaryTable(data) {
     const summary = {};
-
+    
     data.forEach(r => {
         summary[r.Name] = (summary[r.Name] || 0) + 1;
     });
-
+    
     const tableBody = document.querySelector("#summaryTable tbody");
     tableBody.innerHTML = "";
-
+    
     for (let name in summary) {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${name}</td>
-            <td>${summary[name]}</td>
+        <td>${name}</td>
+        <td>${summary[name]}</td>
         `;
         tableBody.appendChild(row);
     }
@@ -61,6 +59,11 @@ document.getElementById("dateFilter").addEventListener("change", filterData);
 function filterData() {
     const nameValue = document.getElementById("nameFilter").value.toLowerCase();
     const dateValue = document.getElementById("dateFilter").value;
+    
+    if (nameValue === "" && dateValue === "") {
+        // auto-refresh every 5 seconds if no filters are applied
+        setInterval(fetchAttendance, 5000);
+    }
 
     const filtered = attendanceData.filter(record => {
         const nameMatch = record.Name.toLowerCase().includes(nameValue);
